@@ -1,0 +1,14 @@
+{
+  "name": "cognifyztask4-project",
+  "version": "1.0.0",
+  "description": "Cognifyz Internship Task 4 - Complex Form Validation and Dynamic DOM Manipulation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "ejs": "^6.0.1",
+    "express": "^5.2.1"
+  }
+}

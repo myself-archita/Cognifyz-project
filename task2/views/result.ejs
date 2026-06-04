@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= title %></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            --bg: #f6f8fc;
+            --surface: #ffffff;
+            --border: #d9e2ef;
+            --text: #142033;
+            --muted: #607086;
+            --accent: #1d4ed8;
+            --accent-2: #2563eb;
+            --soft: #eef4ff;
+            --shadow: 0 20px 60px rgba(20, 32, 51, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100vh; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%); color: var(--text); padding: 28px 18px 34px;
+        }
+        .topbar, .footer, .page { width: min(100%, 1080px); margin: 0 auto; }
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
+            background: rgba(255,255,255,.9); border: 1px solid var(--border);
+            border-radius: 18px; padding: 14px 18px; box-shadow: var(--shadow); backdrop-filter: blur(10px);
+        }
+        .brand strong { display:block; font-size: 1rem; }
+        .brand span, .meta { color: var(--muted); font-size: .9rem; }
+        .badge { padding: 9px 12px; border-radius: 999px; background: var(--soft); color: var(--accent); font-weight: 700; }
+        .page { margin-top: 18px; display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 24px; align-items: stretch; }
+        .summary, .card { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow); }
+        .summary {
+            padding: 34px; background: linear-gradient(180deg, #ffffff, #f8fbff);
+            display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+        }
+        .card { padding: 28px; background: #f9fbff; }
+        .summary p { margin: 0; color: var(--muted); line-height: 1.75; }
+        h1 { margin: 0; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.04; letter-spacing: -.04em; }
+        h2 { margin: 0 0 18px; font-size: 1.4rem; }
+        .detail { display: grid; gap: 14px; }
+        .row { padding: 16px 18px; border-radius: 16px; background: #fff; border: 1px solid var(--border); }
+        .label { display: block; margin-bottom: 8px; color: var(--muted); font-size: .88rem; text-transform: uppercase; letter-spacing: .08em; }
+        .value { font-size: 1.04rem; word-break: break-word; }
+        .toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+        a.button { display:inline-flex; align-items:center; justify-content:center; padding:13px 18px; border-radius:12px; text-decoration:none; font-weight:700; color:#fff; background:var(--accent); }
+        .footer { margin-top: 18px; text-align: center; color: var(--muted); font-size: .9rem; }
+        @media (max-width: 860px) { .page { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: flex-start; } }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <strong>Cognifyz Internship Task 2</strong>
+            <span>Validated submission stored in temporary memory</span>
+        </div>
+        <div class="badge">Server-side validation passed</div>
+    </header>
+
+    <main class="page">
+        <section class="summary">
+            <div>
+                <div class="badge">Submission saved</div>
+                <h1>Thank you, <%= entry.fullName %>.</h1>
+                <p>Your data was validated on the server and stored temporarily in memory.</p>
+            </div>
+            <p class="meta">Stored entries: <%= totalSubmissions %></p>
+        </section>
+
+        <section class="card">
+            <h2><%= title %></h2>
+            <div class="detail">
+                <div class="row"><span class="label">Name</span><div class="value"><%= entry.fullName %></div></div>
+                <div class="row"><span class="label">Email</span><div class="value"><%= entry.email %></div></div>
+                <div class="row"><span class="label">Phone</span><div class="value"><%= entry.phone %></div></div>
+                <div class="row"><span class="label">Course</span><div class="value"><%= entry.course %></div></div>
+                <div class="row"><span class="label">Message</span><div class="value"><%= entry.message %></div></div>
+                <div class="row"><span class="label">Submitted at</span><div class="value"><%= entry.submittedAt %></div></div>
+            </div>
+            <div class="toolbar">
+                <a class="button" href="/">Submit another response</a>
+                <a class="button" href="/submissions">View stored submissions</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">Prepared by Archita Guha Roy • Cognifyz Internship Task 2</footer>
+</body>
+</html>

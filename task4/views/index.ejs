@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= title %></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #06101d;
+            --bg-2: #0d1a31;
+            --accent: #7c9cff;
+            --accent-2: #8b5cf6;
+            --accent-3: #22c55e;
+            --text-soft: rgba(238, 242, 255, 0.78);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            color: #eef2ff;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(124, 156, 255, 0.14), transparent 26%),
+                radial-gradient(circle at top right, rgba(139, 92, 246, 0.14), transparent 24%),
+                radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.08), transparent 24%),
+                linear-gradient(160deg, var(--bg), var(--bg-2));
+        }
+
+        section { scroll-margin-top: 96px; }
+
+        .container { width: min(100%, 1180px); }
+
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(7, 17, 31, 0.78) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+        }
+
+        .progress-shell {
+            position: sticky;
+            top: 0;
+            z-index: 1031;
+            background: rgba(7, 17, 31, 0.72);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .progress-inner {
+            width: min(100%, 1180px);
+            margin: 0 auto;
+            padding: 0.75rem 1rem 0.9rem;
+        }
+
+        .progress-track {
+            position: relative;
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.05);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 25%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+            transition: width 220ms ease;
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-top: 8px;
+            color: var(--text-soft);
+            font-size: 0.88rem;
+            flex-wrap: wrap;
+        }
+
+        .progress-step {
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(238, 242, 255, 0.82);
+            transition: color 160ms ease;
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus {
+            color: #ffffff;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero {
+            min-height: 88vh;
+            display: flex;
+            align-items: center;
+            padding: 5.5rem 0 4.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            pointer-events: none;
+            border-radius: 999px;
+            filter: blur(14px);
+            opacity: 0.85;
+        }
+
+        .hero::before {
+            width: 280px;
+            height: 280px;
+            top: 6%;
+            right: -80px;
+            background: rgba(124, 156, 255, 0.12);
+        }
+
+        .hero::after {
+            width: 220px;
+            height: 220px;
+            left: -80px;
+            bottom: 8%;
+            background: rgba(139, 92, 246, 0.12);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            color: #dbe4ff;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            letter-spacing: 0.02em;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            box-shadow: 0 0 0 6px rgba(124, 156, 255, 0.12);
+        }
+
+        .display-4, .section-title {
+            letter-spacing: -0.05em;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5.4vw, 5.1rem);
+            line-height: 0.98;
+            margin: 1rem 0 1rem;
+            max-width: 11ch;
+        }
+
+        .lead-copy {
+            max-width: 52ch;
+            color: var(--text-soft);
+            font-size: 1.08rem;
+            line-height: 1.8;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.34);
+        }
+
+        .hero-panel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            inset: auto -10% -20% auto;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, rgba(124, 156, 255, 0.16), transparent 65%);
+            pointer-events: none;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: white;
+            border: 0;
+            box-shadow: 0 18px 40px rgba(124, 156, 255, 0.22);
+            transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+        }
+
+        .btn-gradient:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 22px 44px rgba(124, 156, 255, 0.3);
+            filter: brightness(1.03);
+        }
+
+        .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.22);
+        }
+
+        .input-dark {
+            background: rgba(255, 255, 255, 0.07);
+            color: #eef2ff;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .input-dark::placeholder {
+            color: rgba(238, 242, 255, 0.48);
+        }
+
+        .input-dark:focus {
+            background: rgba(255, 255, 255, 0.09);
+            color: #fff;
+            border-color: rgba(124, 156, 255, 0.72);
+            box-shadow: 0 0 0 4px rgba(124, 156, 255, 0.15);
+        }
+
+        .stat-card,
+        .feature-card,
+        .preview-card,
+        .log-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+        }
+
+        .stat-card::after,
+        .feature-card::after,
+        .preview-card::after,
+        .log-card::after {
+            content: "";
+            position: absolute;
+            inset: auto -20% -35% auto;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(124, 156, 255, 0.18), transparent 62%);
+            pointer-events: none;
+        }
+
+        .feature-card:hover,
+        .preview-card:hover,
+        .log-card:hover,
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(124, 156, 255, 0.28);
+            box-shadow: 0 24px 58px rgba(0, 0, 0, 0.24);
+        }
+
+        .strength-meter {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            width: 0%;
+            height: 100%;
+            border-radius: inherit;
+            transition: width 180ms ease, background 180ms ease;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            color: #eef2ff;
+            cursor: pointer;
+            transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+        }
+
+        .chip:hover {
+            transform: translateY(-1px);
+            border-color: rgba(124, 156, 255, 0.35);
+        }
+
+        .chip.active {
+            background: rgba(124, 156, 255, 0.16);
+            border-color: rgba(124, 156, 255, 0.35);
+            box-shadow: 0 12px 30px rgba(124, 156, 255, 0.12);
+        }
+
+        .route-view {
+            display: none;
+            padding: 5rem 0;
+        }
+
+        .route-view.active {
+            display: block;
+        }
+
+        .route-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-soft);
+            font-size: 0.9rem;
+        }
+
+        .hint {
+            color: rgba(238, 242, 255, 0.68);
+        }
+
+        footer {
+            color: rgba(238, 242, 255, 0.72);
+            letter-spacing: 0.02em;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                margin-top: 0.75rem;
+                padding-top: 0.75rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 3.5rem 0 3rem;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                max-width: 100%;
+                font-size: clamp(2.35rem, 7vw, 4.2rem);
+            }
+
+            .lead-copy {
+                max-width: 100%;
+            }
+
+            .route-view {
+                padding: 4rem 0;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .progress-inner {
+                padding-inline: 0.75rem;
+            }
+
+            .hero {
+                padding: 2.75rem 0 2rem;
+            }
+
+            .lead-copy {
+                font-size: 1rem;
+            }
+
+            .glass {
+                border-radius: 1.5rem;
+                box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .d-flex.flex-wrap.gap-3 {
+                gap: 0.75rem !important;
+            }
+
+            .chip {
+                width: 100%;
+            }
+
+            .route-view {
+                padding: 3.25rem 0;
+            }
+
+            .route-pill {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-shell">
+        <div class="progress-inner">
+            <div class="progress-track" aria-label="Section progress">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <div class="progress-meta">
+                <span>Hero → Features → Form → Results</span>
+                <span class="progress-step" id="progressLabel">Hero</span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container py-2">
+            <a class="navbar-brand fw-semibold" href="#home" data-route="home">Cognifyz Task 4</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto gap-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="#home" data-route="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features" data-route="features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#form" data-route="form">Form Demo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#results" data-route="results">Results</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="route-view active hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div>
+                        <span class="eyebrow mb-3">Advanced validation • Dynamic DOM • Client-side routing</span>
+                        <h1 class="hero-title fw-bold">A premium, responsive interaction experience with live validation and instant UI feedback.</h1>
+                        <p class="lead-copy mb-4">
+                            This task demonstrates enterprise-style validation, dynamic DOM updates, and a smoother single-page navigation flow designed for a national-level presentation.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="#form" class="btn btn-gradient btn-lg px-4" data-route="form">Try the form</a>
+                            <a href="#results" class="btn btn-outline-light btn-lg px-4" data-route="results">See live results</a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="glass hero-panel rounded-5 p-4 p-md-5">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div>
+                                    <div class="text-white-50 small text-uppercase">Status Panel</div>
+                                    <h2 class="h3 fw-bold mb-0">Validation and routing</h2>
+                                </div>
+                                <span class="badge rounded-pill text-bg-primary px-3 py-2">Live</span>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="glass stat-card rounded-4 p-3">
+                                        <div class="fw-bold fs-4" id="usersCount">0</div>
+                                        <div class="text-white-50 small">Validated signups</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="glass stat-card rounded-4 p-3">
+                                        <div class="fw-bold fs-4" id="routeLabel">Home</div>
+                                        <div class="text-white-50 small">Current route</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="hint small mb-2">Password strength preview</div>
+                                <div class="strength-meter">
+                                    <div id="strengthBar" class="strength-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="route-view">
+            <div class="container">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3 mb-4">
+                    <div>
+                        <span class="route-pill mb-3">Section 01</span>
+                        <h2 class="section-title fw-bold mb-2">Dynamic DOM behavior</h2>
+                        <p class="text-white-50 mb-0">The cards below respond instantly to user interaction with smooth transitions and a strong visual hierarchy.</p>
+                    </div>
+                    <a href="#form" class="btn btn-outline-light" data-route="form">Continue to form</a>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card feature-card glass text-white rounded-4 p-4 h-100">
+                            <h3 class="h5 fw-bold">Password strength</h3>
+                            <p class="text-white-50 mb-0">Live meter updates as the user types and immediately reflects security quality.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card feature-card glass text-white rounded-4 p-4 h-100">
+                            <h3 class="h5 fw-bold">Instant chips</h3>
+                            <p class="text-white-50 mb-0">Selected options are reflected dynamically in the UI with bold chip states.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card feature-card glass text-white rounded-4 p-4 h-100">
+                            <h3 class="h5 fw-bold">Route-aware view</h3>
+                            <p class="text-white-50 mb-0">Sections change using client-side routing with history updates for a smoother flow.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="form" class="route-view">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-9">
+                        <div class="glass rounded-5 p-4 p-md-5">
+                            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3 mb-3">
+                                <div>
+                                    <span class="route-pill mb-3">Section 02</span>
+                                    <h2 class="section-title fw-bold mb-2">Interactive registration form</h2>
+                                    <p class="text-white-50 mb-0">Use a password with uppercase, lowercase, number, and symbol to unlock the strongest visual state.</p>
+                                </div>
+                                <button type="button" class="btn btn-outline-light" data-route="results">Jump to results</button>
+                            </div>
+
+                            <div id="alertBox" class="alert d-none" role="alert"></div>
+
+                            <form id="signupForm" novalidate>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Full name</label>
+                                        <input id="fullName" class="form-control input-dark" type="text" placeholder="Enter your name" />
+                                        <div class="form-text text-white-50">Minimum 3 characters.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input id="email" class="form-control input-dark" type="email" placeholder="name@example.com" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Password</label>
+                                        <input id="password" class="form-control input-dark" type="password" placeholder="Create a strong password" />
+                                        <div class="mt-2">
+                                            <div class="strength-meter">
+                                                <div id="passwordMeter" class="strength-bar"></div>
+                                            </div>
+                                            <div id="passwordLabel" class="small mt-2 hint">Strength: too weak</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Confirm password</label>
+                                        <input id="confirmPassword" class="form-control input-dark" type="password" placeholder="Repeat password" />
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Choose role</label>
+                                        <div class="d-flex flex-wrap gap-2" id="roleChips">
+                                            <button type="button" class="chip active" data-role="Designer">Designer</button>
+                                            <button type="button" class="chip" data-role="Developer">Developer</button>
+                                            <button type="button" class="chip" data-role="Analyst">Analyst</button>
+                                        </div>
+                                        <input type="hidden" id="role" value="Designer" />
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Short bio</label>
+                                        <textarea id="bio" class="form-control input-dark" rows="4" placeholder="Tell us a bit about yourself"></textarea>
+                                        <div class="form-text text-white-50">The preview panel updates as you type.</div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-wrap gap-3 mt-4">
+                                    <button type="submit" class="btn btn-gradient btn-lg px-4">Validate and save</button>
+                                    <button type="button" id="resetBtn" class="btn btn-outline-light btn-lg px-4">Reset</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results" class="route-view">
+            <div class="container">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3 mb-4">
+                    <div>
+                        <span class="route-pill mb-3">Section 03</span>
+                        <h2 class="section-title fw-bold mb-2">Live DOM preview and submission log</h2>
+                        <p class="text-white-50 mb-0">Your form entry appears instantly in the preview area and the submission log.</p>
+                    </div>
+                    <a href="#home" class="btn btn-outline-light" data-route="home">Back to hero</a>
+                </div>
+
+                <div class="row g-4 align-items-start">
+                    <div class="col-lg-6">
+                        <div class="glass preview-card rounded-5 p-4 p-md-5">
+                            <h3 class="h4 fw-bold mb-3">Live DOM preview</h3>
+                            <div class="mb-3">
+                                <div class="text-white-50 small mb-1">Name</div>
+                                <div id="previewName" class="fs-5 fw-semibold">—</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="text-white-50 small mb-1">Role</div>
+                                <div id="previewRole" class="fs-5 fw-semibold">Designer</div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="text-white-50 small mb-1">Email</div>
+                                <div id="previewEmail" class="fs-5 fw-semibold">—</div>
+                            </div>
+                            <div class="mb-0">
+                                <div class="text-white-50 small mb-1">Bio</div>
+                                <div id="previewBio" class="text-white">Your bio will appear here as you type.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="glass log-card rounded-5 p-4 p-md-5">
+                            <h3 class="h4 fw-bold mb-3">Submission log</h3>
+                            <div id="submissionLog" class="d-grid gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-4 text-center">
+        Prepared by Archita Guha Roy • Cognifyz Internship Task 4
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const routeViews = document.querySelectorAll('.route-view');
+        const routeLabel = document.getElementById('routeLabel');
+        const usersCount = document.getElementById('usersCount');
+        const submissionLog = document.getElementById('submissionLog');
+        const alertBox = document.getElementById('alertBox');
+        const progressFill = document.getElementById('progressFill');
+        const progressLabel = document.getElementById('progressLabel');
+        const roleChips = document.getElementById('roleChips');
+        const roleInput = document.getElementById('role');
+        const passwordInput = document.getElementById('password');
+        const passwordMeter = document.getElementById('passwordMeter');
+        const passwordLabel = document.getElementById('passwordLabel');
+        const strengthBar = document.getElementById('strengthBar');
+        const previewName = document.getElementById('previewName');
+        const previewEmail = document.getElementById('previewEmail');
+        const previewRole = document.getElementById('previewRole');
+        const previewBio = document.getElementById('previewBio');
+        const bioInput = document.getElementById('bio');
+        const fullNameInput = document.getElementById('fullName');
+        const emailInput = document.getElementById('email');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const form = document.getElementById('signupForm');
+        const resetBtn = document.getElementById('resetBtn');
+
+        const submissions = [];
+
+        function showRoute(route) {
+            routeViews.forEach((view) => view.classList.remove('active'));
+            const target = document.getElementById(route);
+            if (target) target.classList.add('active');
+            routeLabel.textContent = route.charAt(0).toUpperCase() + route.slice(1);
+            updateProgress(route);
+            history.pushState({ route }, '', `#${route}`);
+        }
+
+        function updateProgress(route) {
+            const progressMap = {
+                home: { width: '25%', label: 'Hero' },
+                features: { width: '50%', label: 'Features' },
+                form: { width: '75%', label: 'Form' },
+                results: { width: '100%', label: 'Results' }
+            };
+
+            const state = progressMap[route] || progressMap.home;
+            progressFill.style.width = state.width;
+            progressLabel.textContent = state.label;
+        }
+
+        function passwordStrength(password) {
+            let score = 0;
+            if (password.length >= 8) score += 1;
+            if (/[A-Z]/.test(password)) score += 1;
+            if (/[a-z]/.test(password)) score += 1;
+            if (/[0-9]/.test(password)) score += 1;
+            if (/[^A-Za-z0-9]/.test(password)) score += 1;
+            return score;
+        }
+
+        function updatePasswordMeter(password) {
+            const score = passwordStrength(password);
+            const percent = Math.min(score * 20, 100);
+            let label = 'Too weak';
+            let color = '#ef4444';
+
+            if (score >= 2) { label = 'Weak'; color = '#f59e0b'; }
+            if (score >= 3) { label = 'Fair'; color = '#eab308'; }
+            if (score >= 4) { label = 'Strong'; color = '#22c55e'; }
+            if (score >= 5) { label = 'Excellent'; color = '#10b981'; }
+
+            passwordMeter.style.width = `${percent}%`;
+            passwordMeter.style.background = color;
+            strengthBar.style.width = `${percent}%`;
+            strengthBar.style.background = color;
+            passwordLabel.textContent = `Strength: ${label}`;
+        }
+
+        function updatePreview() {
+            previewName.textContent = fullNameInput.value.trim() || '—';
+            previewEmail.textContent = emailInput.value.trim() || '—';
+            previewRole.textContent = roleInput.value;
+            previewBio.textContent = bioInput.value.trim() || 'Your bio will appear here as you type.';
+        }
+
+        function addSubmission(item) {
+            submissions.unshift(item);
+            usersCount.textContent = String(submissions.length);
+            submissionLog.innerHTML = submissions.map((submission, index) => `
+                <div class="glass rounded-4 p-3">
+                    <div class="d-flex justify-content-between flex-wrap gap-2 mb-2">
+                        <strong>#${index + 1} ${submission.name}</strong>
+                        <span class="badge rounded-pill text-bg-success">Saved</span>
+                    </div>
+                    <div class="text-white-50 small">Role: ${submission.role}</div>
+                    <div class="text-white-50 small">Email: ${submission.email}</div>
+                    <div class="text-white-50 small">Password strength: ${submission.strengthLabel}</div>
+                </div>
+            `).join('');
+        }
+
+        function validateForm() {
+            const name = fullNameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const bio = bioInput.value.trim();
+            const errors = [];
+
+            if (name.length < 3) errors.push('Full name must be at least 3 characters.');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('Enter a valid email address.');
+            if (password.length < 8) errors.push('Password must be at least 8 characters long.');
+            if (!/[A-Z]/.test(password)) errors.push('Password must include an uppercase letter.');
+            if (!/[a-z]/.test(password)) errors.push('Password must include a lowercase letter.');
+            if (!/[0-9]/.test(password)) errors.push('Password must include a number.');
+            if (!/[^A-Za-z0-9]/.test(password)) errors.push('Password must include a symbol.');
+            if (password !== confirmPassword) errors.push('Passwords do not match.');
+            if (bio.length < 20) errors.push('Bio must be at least 20 characters.');
+
+            return errors;
+        }
+
+        function showAlert(type, messages) {
+            alertBox.className = `alert ${type === 'success' ? 'alert-success' : 'alert-danger'}`;
+            alertBox.innerHTML = messages.map((message) => `<div>${message}</div>`).join('');
+            alertBox.classList.remove('d-none');
+        }
+
+        roleChips.addEventListener('click', (event) => {
+            const button = event.target.closest('.chip');
+            if (!button) return;
+            roleChips.querySelectorAll('.chip').forEach((chip) => chip.classList.remove('active'));
+            button.classList.add('active');
+            roleInput.value = button.dataset.role;
+            updatePreview();
+        });
+
+        [passwordInput, fullNameInput, emailInput, bioInput, confirmPasswordInput].forEach((input) => {
+            input.addEventListener('input', () => {
+                updatePreview();
+                if (input === passwordInput) updatePasswordMeter(input.value);
+            });
+        });
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const errors = validateForm();
+            updatePasswordMeter(passwordInput.value);
+
+            if (errors.length) {
+                showAlert('error', errors);
+                return;
+            }
+
+            const submission = {
+                name: fullNameInput.value.trim(),
+                email: emailInput.value.trim(),
+                role: roleInput.value,
+                strengthLabel: passwordLabel.textContent.replace('Strength: ', ''),
+                bio: bioInput.value.trim()
+            };
+
+            addSubmission(submission);
+            showAlert('success', ['Form validated successfully.', 'The DOM has been updated with the new submission.']);
+            form.reset();
+            roleInput.value = 'Designer';
+            roleChips.querySelectorAll('.chip').forEach((chip) => chip.classList.remove('active'));
+            roleChips.querySelector('[data-role="Designer"]').classList.add('active');
+            updatePreview();
+            updatePasswordMeter('');
+            showRoute('results');
+        });
+
+        resetBtn.addEventListener('click', () => {
+            form.reset();
+            roleInput.value = 'Designer';
+            roleChips.querySelectorAll('.chip').forEach((chip) => chip.classList.remove('active'));
+            roleChips.querySelector('[data-role="Designer"]').classList.add('active');
+            alertBox.classList.add('d-none');
+            updatePasswordMeter('');
+            updatePreview();
+        });
+
+        function syncRouteFromHash() {
+            const route = (location.hash || '#home').replace('#', '');
+            const valid = ['home', 'features', 'form', 'results'];
+            showRoute(valid.includes(route) ? route : 'home');
+        }
+
+        window.addEventListener('popstate', syncRouteFromHash);
+        window.addEventListener('hashchange', syncRouteFromHash);
+
+        document.querySelectorAll('[data-route]').forEach((link) => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                showRoute(link.dataset.route);
+            });
+        });
+
+        syncRouteFromHash();
+        updatePreview();
+        updatePasswordMeter('');
+        updateProgress((location.hash || '#home').replace('#', ''));
+    </script>
+</body>
+</html>

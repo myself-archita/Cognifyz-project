@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= title %></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            --bg: #f4f7fb;
+            --surface: #ffffff;
+            --surface-soft: #f8fbff;
+            --border: #dbe4f0;
+            --text: #102033;
+            --muted: #5f7187;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --danger-bg: #fff5f5;
+            --danger-border: #fecaca;
+            --danger-text: #b91c1c;
+            --shadow: 0 18px 50px rgba(16, 32, 51, 0.08);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+            color: var(--text);
+            padding: 32px 18px;
+        }
+
+        .page {
+            width: min(100%, 1040px);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .site-header {
+            width: min(100%, 1040px);
+            margin: 0 auto 18px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .brand strong {
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand span {
+            font-size: 0.88rem;
+            color: var(--muted);
+        }
+
+        .nav-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: #eef4ff;
+            color: var(--accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .hero, .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero {
+            padding: 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background:
+                radial-gradient(circle at top right, rgba(37, 99, 235, 0.09), transparent 30%),
+                linear-gradient(180deg, #ffffff, #f8fbff);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            width: fit-content;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #e8f0ff;
+            color: var(--accent);
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        h1 {
+            margin: 18px 0 12px;
+            font-size: clamp(2rem, 4vw, 3.4rem);
+            line-height: 1.04;
+            letter-spacing: -0.04em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 44ch;
+            color: var(--muted);
+            line-height: 1.75;
+            font-size: 1rem;
+        }
+
+        .bullet-list {
+            display: grid;
+            gap: 12px;
+            margin-top: 26px;
+        }
+
+        .bullet {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: rgba(37, 99, 235, 0.04);
+            border: 1px solid rgba(37, 99, 235, 0.08);
+        }
+
+        .bullet strong {
+            color: var(--accent);
+            min-width: 28px;
+        }
+
+        .bullet span {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .card {
+            padding: 30px;
+            background: var(--surface-soft);
+        }
+
+        .card-head {
+            margin-bottom: 20px;
+        }
+
+        .card-head h2 {
+            margin: 0 0 8px;
+            font-size: 1.45rem;
+        }
+
+        .card-head p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .field input {
+            width: 100%;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text);
+            padding: 14px 15px;
+            border-radius: 14px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        .field input:focus {
+            border-color: rgba(37, 99, 235, 0.7);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        }
+
+        .helper {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 0.86rem;
+        }
+
+        .errors {
+            margin-bottom: 6px;
+            background: var(--danger-bg);
+            border: 1px solid var(--danger-border);
+            color: var(--danger-text);
+            border-radius: 16px;
+            padding: 14px 16px;
+        }
+
+        .errors strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .errors ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+
+        .site-footer {
+            width: min(100%, 1040px);
+            margin: 18px auto 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        button {
+            border: 0;
+            border-radius: 12px;
+            padding: 13px 18px;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: white;
+            background: var(--accent);
+            cursor: pointer;
+            transition: transform 160ms ease, background 160ms ease;
+        }
+
+        button:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .note {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 820px) {
+            .page { grid-template-columns: 1fr; }
+            .site-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="brand">
+            <strong>Internship Submission</strong>
+            <span>Task 1 • HTML Structure & Basic Server</span>
+        </div>
+        <div class="nav-pill">Express • EJS • Form Handling</div>
+    </header>
+
+    <main class="page">
+        <section class="hero">
+            <div>
+                <div class="eyebrow">Task 1 • Server-side rendering</div>
+                <h1>Simple form submission with Express and EJS.</h1>
+                <p>
+                    This project demonstrates HTML structure, backend form handling, and server-rendered output in a clean, internship-ready format.
+                </p>
+            </div>
+
+            <div class="bullet-list">
+                <div class="bullet">
+                    <strong>01</strong>
+                    <span>Responsive layout with a professional card-based interface.</span>
+                </div>
+                <div class="bullet">
+                    <strong>02</strong>
+                    <span>Server-side validation with clear feedback for missing fields.</span>
+                </div>
+                <div class="bullet">
+                    <strong>03</strong>
+                    <span>Submission result rendered directly from the server using EJS.</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <div class="card-head">
+                <h2><%= title %></h2>
+                <p>Enter your details below and submit the form to see server-rendered output.</p>
+            </div>
+
+            <% if (errors && errors.length) { %>
+                <div class="errors" role="alert" aria-live="polite">
+                    <strong>Please fix the following:</strong>
+                    <ul>
+                        <% errors.forEach((error) => { %>
+                            <li><%= error %></li>
+                        <% }) %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <form action="/submit" method="POST" novalidate>
+                <div class="field">
+                    <label for="username">Full name</label>
+                    <input id="username" type="text" name="username" value="<%= values.username %>" placeholder="Enter your full name" required>
+                    <div class="helper">Used to confirm the submitted details.</div>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email address</label>
+                    <input id="email" type="email" name="email" value="<%= values.email %>" placeholder="name@example.com" required>
+                    <div class="helper">Displayed on the result page after submission.</div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit">Submit form</button>
+                    <span class="note">Built with Express + EJS</span>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        Prepared by Archita Guha Roy • Internship Project Submission
+    </footer>
+</body>
+</html>

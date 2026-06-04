@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= title %></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            --bg: #f6f8fc;
+            --surface: #ffffff;
+            --border: #d9e2ef;
+            --text: #142033;
+            --muted: #607086;
+            --accent: #1d4ed8;
+            --accent-2: #2563eb;
+            --soft: #eef4ff;
+            --danger-bg: #fff5f5;
+            --danger-border: #fecaca;
+            --danger-text: #b91c1c;
+            --shadow: 0 20px 60px rgba(20, 32, 51, 0.08);
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+            color: var(--text);
+            padding: 28px 18px 34px;
+        }
+        .topbar, .footer, .page { width: min(100%, 1080px); margin: 0 auto; }
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center; gap: 16px;
+            background: rgba(255,255,255,.9); border: 1px solid var(--border);
+            border-radius: 18px; padding: 14px 18px; box-shadow: var(--shadow); backdrop-filter: blur(10px);
+        }
+        .brand strong { display:block; font-size: 1rem; }
+        .brand span, .meta { color: var(--muted); font-size: .9rem; }
+        .badge { padding: 9px 12px; border-radius: 999px; background: var(--soft); color: var(--accent); font-weight: 700; }
+        .page { margin-top: 18px; display: grid; grid-template-columns: 1fr 1.05fr; gap: 24px; }
+        .panel, .card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 24px; box-shadow: var(--shadow);
+        }
+        .panel { padding: 30px; background: linear-gradient(180deg, #fff, #f9fbff); }
+        .card { padding: 28px; }
+        h1 { margin: 14px 0 12px; font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.02; letter-spacing: -.04em; }
+        h2 { margin: 0 0 10px; font-size: 1.4rem; }
+        p { margin: 0; color: var(--muted); line-height: 1.7; }
+        .feature { margin-top: 20px; display: grid; gap: 12px; }
+        .item { padding: 14px 16px; border: 1px solid rgba(29,78,216,.08); background: rgba(29,78,216,.04); border-radius: 16px; }
+        form { display: grid; gap: 14px; margin-top: 10px; }
+        .field label { display:block; margin-bottom: 8px; font-weight: 600; font-size: .92rem; }
+        .field input, .field select, .field textarea {
+            width: 100%; border: 1px solid var(--border); border-radius: 14px; padding: 13px 14px;
+            font: inherit; color: var(--text); background: #fff; outline: none;
+        }
+        .field textarea { min-height: 120px; resize: vertical; }
+        .field input:focus, .field select:focus, .field textarea:focus {
+            border-color: rgba(29,78,216,.7); box-shadow: 0 0 0 4px rgba(29,78,216,.11);
+        }
+        .help { margin-top: 7px; font-size: .85rem; color: var(--muted); }
+        .errors {
+            background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border);
+            border-radius: 16px; padding: 14px 16px;
+        }
+        .errors strong { display:block; margin-bottom: 8px; }
+        .errors ul { margin: 0; padding-left: 18px; }
+        .actions { display:flex; align-items:center; gap: 12px; flex-wrap: wrap; margin-top: 2px; }
+        button {
+            border: 0; border-radius: 12px; padding: 13px 18px; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #fff; font-weight: 700; cursor: pointer;
+        }
+        .link { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .footer { margin-top: 18px; text-align: center; color: var(--muted); font-size: .9rem; }
+        @media (max-width: 860px) { .page { grid-template-columns: 1fr; } .topbar { flex-direction: column; align-items: flex-start; } }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <strong>Cognifyz Internship Task 2</strong>
+            <span>Inline styles, validation, and temporary server-side storage</span>
+        </div>
+        <div class="badge">Express + EJS + JavaScript</div>
+    </header>
+
+    <main class="page">
+        <section class="panel">
+            <div class="meta">Task 2 • Basic interaction</div>
+            <h1>More complex form handling with clean validation.</h1>
+            <p>
+                This demo shows client-side interaction with inline JavaScript and server-side validation before storing entries in temporary memory.
+            </p>
+            <div class="feature">
+                <div class="item"><strong>Client check:</strong> validates fields before submit.</div>
+                <div class="item"><strong>Server check:</strong> confirms data integrity on the backend.</div>
+                <div class="item"><strong>Temporary storage:</strong> saves valid submissions in memory.</div>
+            </div>
+            <p style="margin-top:18px;">Stored submissions so far: <strong><%= totalSubmissions %></strong></p>
+        </section>
+
+        <section class="card">
+            <h2><%= title %></h2>
+            <p>Fill in the form below and submit it to see the validation flow.</p>
+
+            <% if (errors && errors.length) { %>
+                <div class="errors" role="alert">
+                    <strong>Please fix the following:</strong>
+                    <ul>
+                        <% errors.forEach((error) => { %><li><%= error %></li><% }) %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <form id="submissionForm" action="/submit" method="POST" novalidate>
+                <div class="field">
+                    <label for="fullName">Full name</label>
+                    <input id="fullName" name="fullName" value="<%= values.fullName %>" placeholder="Enter your name" required />
+                    <div class="help">Minimum 3 characters.</div>
+                </div>
+                <div class="field">
+                    <label for="email">Email address</label>
+                    <input id="email" name="email" type="email" value="<%= values.email %>" placeholder="name@example.com" required />
+                    <div class="help">Must be a valid email format.</div>
+                </div>
+                <div class="field">
+                    <label for="phone">Phone number</label>
+                    <input id="phone" name="phone" value="<%= values.phone %>" placeholder="10-digit number" maxlength="10" required />
+                    <div class="help">Exactly 10 digits.</div>
+                </div>
+                <div class="field">
+                    <label for="course">Interested course</label>
+                    <select id="course" name="course" required>
+                        <option value="">Choose one</option>
+                        <option value="Frontend Development" <%= values.course === 'Frontend Development' ? 'selected' : '' %>>Frontend Development</option>
+                        <option value="Backend Development" <%= values.course === 'Backend Development' ? 'selected' : '' %>>Backend Development</option>
+                        <option value="UI/UX Basics" <%= values.course === 'UI/UX Basics' ? 'selected' : '' %>>UI/UX Basics</option>
+                    </select>
+                    <div class="help">Select one option to continue.</div>
+                </div>
+                <div class="field">
+                    <label for="message">Short message</label>
+                    <textarea id="message" name="message" placeholder="Write a short note..." required><%= values.message %></textarea>
+                    <div class="help">At least 10 characters.</div>
+                </div>
+                <div class="actions">
+                    <button type="submit">Submit application</button>
+                    <a class="link" href="/submissions">View stored submissions</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        Prepared by Archita Guha Roy • Cognifyz Internship Task 2
+    </footer>
+
+    <script>
+        const form = document.getElementById('submissionForm');
+        form.addEventListener('submit', (event) => {
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const course = document.getElementById('course').value.trim();
+            const message = document.getElementById('message').value.trim();
+            const clientErrors = [];
+
+            if (fullName.length < 3) clientErrors.push('Full name must be at least 3 characters.');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) clientErrors.push('Please enter a valid email address.');
+            if (!/^[0-9]{10}$/.test(phone)) clientErrors.push('Phone number must contain exactly 10 digits.');
+            if (!course) clientErrors.push('Please choose a course.');
+            if (message.length < 10) clientErrors.push('Message must be at least 10 characters.');
+
+            if (clientErrors.length) {
+                event.preventDefault();
+                alert(clientErrors.join('\n'));
+            }
+        });
+    </script>
+</body>
+</html>

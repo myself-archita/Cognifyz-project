@@ -1,0 +1,14 @@
+{
+  "name": "cognifyztask3-project",
+  "version": "1.0.0",
+  "description": "Cognifyz Internship Task 3 - Advanced CSS Styling and Responsive Design",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "ejs": "^6.0.1"
+  }
+}

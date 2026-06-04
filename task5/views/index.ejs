@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= title %></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050d18;
+            --bg-2: #0d1a31;
+            --accent: #7c9cff;
+            --accent-2: #8b5cf6;
+            --accent-3: #22c55e;
+            --text-soft: rgba(238, 242, 255, 0.78);
+            --border-soft: rgba(255, 255, 255, 0.14);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            color: #eef2ff;
+            overflow-x: hidden;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(124, 156, 255, 0.16), transparent 24%),
+                radial-gradient(circle at top right, rgba(139, 92, 246, 0.13), transparent 22%),
+                radial-gradient(circle at bottom left, rgba(34, 197, 94, 0.08), transparent 22%),
+                linear-gradient(160deg, var(--bg), var(--bg-2));
+        }
+
+        section { scroll-margin-top: 92px; }
+
+        .navbar {
+            backdrop-filter: blur(20px);
+            background: rgba(7, 17, 31, 0.78) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+        }
+
+        .navbar-nav .nav-link {
+            color: rgba(238, 242, 255, 0.82);
+        }
+
+        .navbar-nav .nav-link:hover,
+        .navbar-nav .nav-link:focus {
+            color: #ffffff;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .hero {
+            min-height: 92vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 5rem 0 4rem;
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            pointer-events: none;
+            filter: blur(16px);
+            opacity: 0.8;
+        }
+
+        .hero::before {
+            width: 280px;
+            height: 280px;
+            right: -80px;
+            top: 5%;
+            background: rgba(124, 156, 255, 0.12);
+        }
+
+        .hero::after {
+            width: 220px;
+            height: 220px;
+            left: -80px;
+            bottom: 12%;
+            background: rgba(139, 92, 246, 0.12);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.06fr 0.94fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-soft);
+            color: #dbe4ff;
+            letter-spacing: 0.02em;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            box-shadow: 0 0 0 6px rgba(124, 156, 255, 0.12);
+        }
+
+        .hero-title {
+            font-size: clamp(2.6rem, 5.7vw, 5.2rem);
+            line-height: 0.96;
+            letter-spacing: -0.06em;
+            max-width: 11ch;
+            margin: 1rem 0 1rem;
+        }
+
+        .lead-copy {
+            max-width: 54ch;
+            color: var(--text-soft);
+            font-size: 1.08rem;
+            line-height: 1.8;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-soft);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.34);
+        }
+
+        .hero-panel {
+            position: relative;
+            overflow: hidden;
+            transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+        }
+
+        .hero-panel::after {
+            content: "";
+            position: absolute;
+            inset: auto -10% -16% auto;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, rgba(124, 156, 255, 0.16), transparent 65%);
+            pointer-events: none;
+        }
+
+        .hero-panel.is-online {
+            border-color: rgba(34, 197, 94, 0.28);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(34, 197, 94, 0.16), 0 0 42px rgba(34, 197, 94, 0.12);
+        }
+
+        .hero-panel.is-online::after {
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.18), transparent 65%);
+        }
+
+        .hero-panel.is-offline {
+            border-color: rgba(239, 68, 68, 0.34);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.34), 0 0 0 1px rgba(239, 68, 68, 0.2), 0 0 54px rgba(239, 68, 68, 0.18);
+            transform: translateY(-2px);
+        }
+
+        .hero-panel.is-offline::after {
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.2), transparent 65%);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: white;
+            border: 0;
+            box-shadow: 0 18px 40px rgba(124, 156, 255, 0.22);
+            transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+        }
+
+        .btn-gradient:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 22px 44px rgba(124, 156, 255, 0.3);
+            filter: brightness(1.03);
+        }
+
+        .btn-outline-light {
+            border-color: rgba(255, 255, 255, 0.22);
+        }
+
+        .route-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-soft);
+            color: var(--text-soft);
+            font-size: 0.9rem;
+        }
+
+        .stat-card,
+        .feature-card,
+        .metric-card,
+        .record-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+        }
+
+        .records-shell.is-offline {
+            opacity: 0.7;
+            filter: grayscale(0.25);
+        }
+
+        .retry-banner {
+            border: 1px solid rgba(239, 68, 68, 0.28);
+            background: rgba(239, 68, 68, 0.08);
+            color: #fee2e2;
+        }
+
+        .stat-card::after,
+        .feature-card::after,
+        .metric-card::after,
+        .record-card::after {
+            content: "";
+            position: absolute;
+            inset: auto -20% -35% auto;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(124, 156, 255, 0.18), transparent 62%);
+            pointer-events: none;
+        }
+
+        .stat-card:hover,
+        .feature-card:hover,
+        .metric-card:hover,
+        .record-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(124, 156, 255, 0.3);
+            box-shadow: 0 24px 58px rgba(0, 0, 0, 0.24);
+        }
+
+        .metric {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .input-dark,
+        .select-dark {
+            background: rgba(255, 255, 255, 0.07);
+            color: #eef2ff;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .input-dark::placeholder {
+            color: rgba(238, 242, 255, 0.48);
+        }
+
+        .input-dark:focus,
+        .select-dark:focus {
+            background: rgba(255, 255, 255, 0.09);
+            color: #fff;
+            border-color: rgba(124, 156, 255, 0.72);
+            box-shadow: 0 0 0 4px rgba(124, 156, 255, 0.15);
+        }
+
+        .status-badge {
+            letter-spacing: 0.02em;
+        }
+
+        .health-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.55rem 0.85rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(238, 242, 255, 0.9);
+            font-size: 0.9rem;
+        }
+
+        .health-dot {
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 999px;
+            background: #94a3b8;
+            box-shadow: 0 0 0 0 rgba(148, 163, 184, 0.25);
+        }
+
+        .health-badge.is-online .health-dot {
+            background: #22c55e;
+            box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.12);
+        }
+
+        .health-badge.is-offline .health-dot {
+            background: #ef4444;
+            box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.12);
+        }
+
+        .empty {
+            color: var(--text-soft);
+        }
+
+        .section-heading {
+            letter-spacing: -0.04em;
+        }
+
+        footer {
+            color: rgba(238, 242, 255, 0.72);
+            letter-spacing: 0.02em;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                margin-top: 0.75rem;
+                padding-top: 0.75rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 3.5rem 0 2.75rem;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                max-width: 100%;
+            }
+
+            .lead-copy {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .btn {
+                width: 100%;
+            }
+
+            .d-flex.flex-wrap.gap-3 {
+                gap: 0.75rem !important;
+            }
+
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .hero {
+                padding: 2.5rem 0 2rem;
+            }
+
+            .glass {
+                border-radius: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container py-2">
+            <a class="navbar-brand fw-semibold" href="#top">Cognifyz Task 5</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav ms-auto gap-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="#dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#api">API</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#data">Data</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main id="top">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div>
+                        <span class="eyebrow mb-3">RESTful API • CRUD • PostgreSQL-backed data</span>
+                        <h1 class="hero-title fw-bold">A premium API dashboard powered by a real backend and database.</h1>
+                        <p class="lead-copy mb-4">
+                            Task 5 now connects directly to the backend API, which stores records in PostgreSQL through Prisma. The front end fetches live data and updates the interface after every CRUD action.
+                        </p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="#dashboard" class="btn btn-gradient btn-lg px-4">Open dashboard</a>
+                            <button id="refreshBtn" class="btn btn-outline-light btn-lg px-4" type="button">Refresh API</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="glass rounded-5 p-4 p-md-5 hero-panel">
+                                <div class="d-flex justify-content-between align-items-start mb-4">
+                                    <div>
+                                        <div class="text-white-50 small text-uppercase">Live API</div>
+                                        <h2 class="h3 fw-bold mb-0">Connected backend</h2>
+                                    </div>
+                                <span id="healthBadge" class="health-badge">
+                                    <span class="health-dot"></span>
+                                    <span id="healthBadgeText">Checking backend...</span>
+                                </span>
+                                </div>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="glass rounded-4 p-3 stat-card">
+                                        <div class="metric" id="itemCount">0</div>
+                                        <div class="text-white-50 small">Stored tasks</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="glass rounded-4 p-3 stat-card">
+                                        <div class="metric" id="statusCount">0</div>
+                                        <div class="text-white-50 small">Completed tasks</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 route-pill">
+                                <span class="fw-semibold">Endpoint</span>
+                                <span id="activeEndpoint">GET /api/tasks</span>
+                            </div>
+                            <div class="mt-3 text-white-50 small">
+                                API base: <span id="apiBaseLabel"><%= apiBaseUrl %></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="py-5">
+            <div class="container py-2">
+                <div class="row g-4">
+                    <div class="col-lg-5">
+                        <div class="glass rounded-5 p-4 p-md-5 h-100">
+                            <span class="route-pill mb-3">Create / Update / Delete</span>
+                            <h2 class="section-heading fw-bold mb-2">Manage records through the API</h2>
+                            <p class="text-white-50 mb-4">Use the form to create a new card, edit an existing one, or remove an item from the database.</p>
+
+                            <form id="itemForm">
+                                <input type="hidden" id="itemId" value="" />
+                                <div class="mb-3">
+                                    <label class="form-label">Title</label>
+                                    <input id="title" class="form-control input-dark" placeholder="Enter task title" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <input id="category" class="form-control input-dark" placeholder="UI/UX, Backend, Research..." required />
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select id="status" class="form-select select-dark" required>
+                                        <option value="">Choose status</option>
+                                        <option>Planned</option>
+                                        <option>In Progress</option>
+                                        <option>Completed</option>
+                                    </select>
+                                </div>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <button class="btn btn-gradient px-4" type="submit" id="submitBtn">Create item</button>
+                                    <button class="btn btn-outline-light px-4" type="button" id="clearBtn">Clear</button>
+                                </div>
+                            </form>
+                            <div id="formMessage" class="mt-3"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7">
+                        <div id="recordsShell" class="glass rounded-5 p-4 p-md-5 h-100">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-3">
+                                <div>
+                                    <span class="route-pill mb-3">Live data</span>
+                                    <h2 class="section-heading fw-bold mb-2">Fetched from the PostgreSQL API</h2>
+                                    <p class="text-white-50 mb-0">The list below is populated from `GET /api/tasks` and updates immediately after CRUD actions.</p>
+                                </div>
+                                <button class="btn btn-outline-light" type="button" id="seedBtn">Reload data</button>
+                            </div>
+                            <div id="offlineNotice" class="retry-banner rounded-4 p-3 mb-3 d-none">
+                                Backend is offline right now. Please retry once the API is back online.
+                            </div>
+                            <div id="itemsList" class="d-grid gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="api" class="py-5">
+            <div class="container py-2">
+                <div class="glass rounded-5 p-4 p-md-5">
+                    <span class="route-pill mb-3">API routes</span>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="glass rounded-4 p-4 feature-card h-100">
+                                <h3 class="h5 fw-bold">GET /api/tasks</h3>
+                                <p class="text-white-50 mb-0">Returns all stored tasks for the dashboard.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass rounded-4 p-4 feature-card h-100">
+                                <h3 class="h5 fw-bold">POST /api/tasks</h3>
+                                <p class="text-white-50 mb-0">Creates a new task record in PostgreSQL.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass rounded-4 p-4 feature-card h-100">
+                                <h3 class="h5 fw-bold">PUT / DELETE</h3>
+                                <p class="text-white-50 mb-0">Updates or removes a selected task with one click.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="data" class="py-5">
+            <div class="container py-2">
+                <div class="row g-4 align-items-start">
+                    <div class="col-lg-6">
+                        <div class="glass rounded-5 p-4 p-md-5 h-100">
+                            <span class="route-pill mb-3">Selected record</span>
+                            <h2 class="section-heading fw-bold mb-3">Edit a record quickly</h2>
+                            <p class="text-white-50">Click edit on any item to load it into the form. Save changes to call the backend API again.</p>
+                            <div class="glass rounded-4 p-4 mt-4 metric-card">
+                                <div class="text-white-50 small mb-1">Selected item</div>
+                                <div id="selectedItem" class="fw-semibold">No item selected</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="glass rounded-5 p-4 p-md-5 h-100">
+                            <span class="route-pill mb-3">Integration note</span>
+                            <h2 class="section-heading fw-bold mb-3">Front-end + backend + database</h2>
+                            <p class="text-white-50 mb-0">
+                                This page fetches data from the backend service, which stores records in PostgreSQL via Prisma. The interface updates after every API action.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-4 text-center">
+        Prepared by Archita Guha Roy • Cognifyz Internship Task 5
+    </footer>
+
+    <script>
+        const apiBaseUrl = "<%= apiBaseUrl %>";
+        const taskApi = '/api/tasks';
+        const itemsList = document.getElementById('itemsList');
+        const itemCount = document.getElementById('itemCount');
+        const statusCount = document.getElementById('statusCount');
+        const activeEndpoint = document.getElementById('activeEndpoint');
+        const selectedItem = document.getElementById('selectedItem');
+        const formMessage = document.getElementById('formMessage');
+        const itemForm = document.getElementById('itemForm');
+        const itemIdInput = document.getElementById('itemId');
+        const titleInput = document.getElementById('title');
+        const categoryInput = document.getElementById('category');
+        const statusInput = document.getElementById('status');
+        const submitBtn = document.getElementById('submitBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const seedBtn = document.getElementById('seedBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const apiBaseLabel = document.getElementById('apiBaseLabel');
+        const healthBadge = document.getElementById('healthBadge');
+        const healthBadgeText = document.getElementById('healthBadgeText');
+        const heroPanel = document.querySelector('.hero-panel');
+        const recordsShell = document.getElementById('recordsShell');
+        const offlineNotice = document.getElementById('offlineNotice');
+
+        let currentTasks = [];
+        let healthPollTimer = null;
+        let backendOnline = false;
+
+        apiBaseLabel.textContent = apiBaseUrl;
+
+        function setMessage(type, text) {
+            formMessage.innerHTML = `<div class="alert ${type === 'success' ? 'alert-success' : 'alert-danger'} mb-0">${text}</div>`;
+        }
+
+        function clearMessage() {
+            formMessage.innerHTML = '';
+        }
+
+        function setHealthState(state, text) {
+            healthBadge.classList.remove('is-online', 'is-offline');
+            heroPanel.classList.remove('is-online', 'is-offline');
+            recordsShell.classList.remove('is-offline');
+            offlineNotice.classList.add('d-none');
+            if (state === 'online') {
+                backendOnline = true;
+                healthBadge.classList.add('is-online');
+                heroPanel.classList.add('is-online');
+            } else if (state === 'offline') {
+                backendOnline = false;
+                healthBadge.classList.add('is-offline');
+                heroPanel.classList.add('is-offline');
+                recordsShell.classList.add('is-offline');
+                offlineNotice.classList.remove('d-none');
+            }
+            healthBadgeText.textContent = text;
+        }
+
+        async function checkBackendHealth() {
+            try {
+                const response = await fetch(`${apiBaseUrl.replace(/\/$/, '')}/health`, { cache: 'no-store' });
+                if (!response.ok) throw new Error('Backend health check failed');
+                setHealthState('online', 'Backend online');
+            } catch (error) {
+                setHealthState('offline', 'Backend offline');
+            }
+        }
+
+        async function fetchTasks() {
+            activeEndpoint.textContent = 'GET /api/tasks';
+            try {
+                const response = await fetch(taskApi);
+                if (!response.ok) throw new Error('Task fetch failed');
+                currentTasks = await response.json();
+                renderTasks();
+                updateMetrics();
+            } catch (error) {
+                currentTasks = [];
+                renderTasks();
+                updateMetrics();
+                if (!backendOnline) {
+                    itemsList.innerHTML = `<div class="retry-banner rounded-4 p-4">Tasks cannot load while the backend is offline. Try reloading after the API comes back.</div>`;
+                } else {
+                    itemsList.innerHTML = `<div class="glass rounded-4 p-4 empty">Unable to load tasks right now. Please try again.</div>`;
+                }
+            }
+        }
+
+        function updateMetrics() {
+            itemCount.textContent = currentTasks.length;
+            statusCount.textContent = currentTasks.filter((task) => task.status === 'Completed').length;
+        }
+
+        function renderTasks() {
+            if (!currentTasks.length) {
+                itemsList.innerHTML = `<div class="glass rounded-4 p-4 empty">No tasks found. Create one using the form.</div>`;
+                return;
+            }
+
+            itemsList.innerHTML = currentTasks.map((task) => `
+                <div class="glass rounded-4 p-4 record-card">
+                    <div class="d-flex justify-content-between flex-wrap gap-2">
+                        <div>
+                            <div class="text-white-50 small mb-1">#${task.id} • ${task.category}</div>
+                            <h3 class="h5 fw-bold item-title mb-1">${task.title}</h3>
+                        </div>
+                        <span class="badge rounded-pill text-bg-primary status-badge">${task.status}</span>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <button class="btn btn-outline-light btn-sm" data-action="edit" data-id="${task.id}">Edit</button>
+                        <button class="btn btn-outline-danger btn-sm" data-action="delete" data-id="${task.id}">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function submitTask(event) {
+            event.preventDefault();
+            clearMessage();
+
+            const payload = {
+                title: titleInput.value.trim(),
+                category: categoryInput.value.trim(),
+                status: statusInput.value.trim()
+            };
+
+            const isEditing = Boolean(itemIdInput.value);
+            const url = isEditing ? `${taskApi}/${itemIdInput.value}` : taskApi;
+            const method = isEditing ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                setMessage('error', error.message || 'Something went wrong');
+                return;
+            }
+
+            activeEndpoint.textContent = `${method} /api/tasks`;
+            setMessage('success', isEditing ? 'Task updated successfully.' : 'Task created successfully.');
+            resetForm();
+            await fetchTasks();
+        }
+
+        async function handleListAction(event) {
+            const button = event.target.closest('button[data-action]');
+            if (!button) return;
+            const taskId = button.dataset.id;
+            const action = button.dataset.action;
+            const task = currentTasks.find((entry) => String(entry.id) === String(taskId));
+
+            if (action === 'edit' && task) {
+                itemIdInput.value = task.id;
+                titleInput.value = task.title;
+                categoryInput.value = task.category;
+                statusInput.value = task.status;
+                submitBtn.textContent = 'Update item';
+                selectedItem.textContent = `Editing #${task.id} — ${task.title}`;
+                clearMessage();
+                window.location.hash = '#dashboard';
+                return;
+            }
+
+            if (action === 'delete') {
+                const response = await fetch(`${taskApi}/${taskId}`, { method: 'DELETE' });
+                if (!response.ok && response.status !== 204) {
+                    const error = await response.json();
+                    setMessage('error', error.message || 'Delete failed');
+                    return;
+                }
+                activeEndpoint.textContent = `DELETE /api/tasks/${taskId}`;
+                setMessage('success', 'Task deleted successfully.');
+                if (String(itemIdInput.value) === String(taskId)) {
+                    resetForm();
+                }
+                await fetchTasks();
+            }
+        }
+
+        function resetForm() {
+            itemForm.reset();
+            itemIdInput.value = '';
+            submitBtn.textContent = 'Create item';
+            selectedItem.textContent = 'No item selected';
+        }
+
+        itemForm.addEventListener('submit', submitTask);
+        itemsList.addEventListener('click', handleListAction);
+        clearBtn.addEventListener('click', () => {
+            resetForm();
+            clearMessage();
+        });
+        seedBtn.addEventListener('click', fetchTasks);
+        refreshBtn.addEventListener('click', fetchTasks);
+
+        checkBackendHealth();
+        healthPollTimer = setInterval(checkBackendHealth, 30000);
+        fetchTasks();
+    </script>
+</body>
+</html>
