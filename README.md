@@ -1,4 +1,4 @@
-# Cognifyz-Project
+# Cognifyz-project
 
 Monorepo for the Cognifyz internship tasks.
 
